@@ -21,7 +21,7 @@ namespace Logic.Repositories
 
             log.Page = sender.HttpContext.Request.Url.AbsoluteUri;
             log.HttpMethod = sender.HttpContext.Request.HttpMethod;
-            log.ViewBag = sender.ViewBag;
+            log.ViewBag = (dynamic)sender.ViewBag;
 
             _database.WriteDocument(repositoryCollection, log);
         }

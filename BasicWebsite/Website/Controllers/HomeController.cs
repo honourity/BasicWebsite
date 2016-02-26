@@ -12,6 +12,13 @@ namespace BasicWebsite.Controllers
             this._logRepository = logRepository;
         }
 
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            base.OnActionExecuted(filterContext);
+
+            _logRepository.Log(this);
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -20,12 +27,6 @@ namespace BasicWebsite.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
-            _logRepository.Log(this);
-
-            _logRepository.Log(string.Empty);
-
-            _logRepository.Log(null);
 
             return View();
         }

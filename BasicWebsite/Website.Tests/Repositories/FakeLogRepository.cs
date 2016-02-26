@@ -6,7 +6,12 @@ namespace BasicWebsite.Tests.Repositories
 {
     public class FakeLogRepository : ILogRepository
     {
-        public void Log(dynamic data)
+        public void Log(System.Web.Mvc.Controller sender)
+        {
+            //nothing to do here
+        }
+
+        public void Log(dynamic sender)
         {
             //nothing to do here
         }
