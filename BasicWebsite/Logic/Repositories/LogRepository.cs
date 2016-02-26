@@ -1,6 +1,6 @@
-﻿using Data.MongoDB;
+﻿using System;
+using Data.Interfaces;
 using Logic.Interfaces;
-using Logic.Models;
 
 namespace Logic.Repositories
 {
@@ -15,9 +15,35 @@ namespace Logic.Repositories
             this._database = database;
         }
 
-        public void Log(Log log)
+        public void Log(System.Web.Mvc.Controller sender)
         {
+            var log = NewDynamicLog();
+
+            log.Page = sender.HttpContext.Request.Url.AbsoluteUri;
+            log.HttpMethod = sender.HttpContext.Request.HttpMethod;
+            log.ViewBag = sender.ViewBag;
+
             _database.WriteDocument(repositoryCollection, log);
+        }
+
+        public void Log(dynamic sender)
+        {
+            var log = NewDynamicLog();
+
+            log.SenderData = sender;
+
+            _database.WriteDocument(repositoryCollection, log);
+        }
+
+        private dynamic NewDynamicLog()
+        {
+            dynamic log = new System.Dynamic.ExpandoObject();
+
+            //populating always-present fields
+            log._id = System.Guid.NewGuid();
+            log._timestamp = System.DateTime.Now;
+
+            return log;
         }
     }
 }

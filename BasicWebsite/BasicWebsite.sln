@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "BasicWebsite\Website.csproj", "{94AB428D-D757-415D-B1BE-EE6930D113EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{94AB428D-D757-415D-B1BE-EE6930D113EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website.Tests", "BasicWebsite.Tests\Website.Tests.csproj", "{584A82E4-CB12-45FA-804F-419AC24AB1A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website.Tests", "Website.Tests\Website.Tests.csproj", "{584A82E4-CB12-45FA-804F-419AC24AB1A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{4033A1A9-93A9-4117-8474-D3C8AC39A719}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{19BD939F-9E6B-48EB-A8F4-59FEB998E8A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website.Ninject", "Website.Ninject\Website.Ninject.csproj", "{52D6138F-F921-4783-BEF1-C3B3C2E6B06D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{19BD939F-9E6B-48EB-A8F4-59FEB998E8A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19BD939F-9E6B-48EB-A8F4-59FEB998E8A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19BD939F-9E6B-48EB-A8F4-59FEB998E8A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52D6138F-F921-4783-BEF1-C3B3C2E6B06D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52D6138F-F921-4783-BEF1-C3B3C2E6B06D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52D6138F-F921-4783-BEF1-C3B3C2E6B06D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52D6138F-F921-4783-BEF1-C3B3C2E6B06D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

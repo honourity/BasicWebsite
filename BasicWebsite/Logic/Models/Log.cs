@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Logic.Models
 {
-    public class Log
+    class Log
     {
-        public string Page { get; set; }
-
-        public Exception Exception { get; set; }
     }
 }

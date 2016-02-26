@@ -1,9 +1,9 @@
-﻿using Logic.Models;
-
-namespace Logic.Interfaces
+﻿namespace Logic.Interfaces
 {
     public interface ILogRepository
     {
-        void Log(Log log);
+        void Log(System.Web.Mvc.Controller sender);
+
+        void Log(dynamic sender);
     }
 }
