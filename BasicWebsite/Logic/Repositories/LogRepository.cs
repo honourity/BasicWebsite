@@ -21,19 +21,43 @@ namespace Logic.Repositories
 
             log.Page = sender.HttpContext.Request.Url.AbsoluteUri;
             log.HttpMethod = sender.HttpContext.Request.HttpMethod;
-            log.ViewBag = (dynamic)sender.ViewBag;
+            log.ViewModel = sender.ViewData.Model;
 
             _database.WriteDocument(repositoryCollection, log);
         }
 
-        public void Log(dynamic sender)
+        public void Log(System.Web.Mvc.ActionExecutingContext sender)
         {
             var log = NewDynamicLog();
 
-            log.SenderData = sender;
+            log.Page = sender.HttpContext.Request.Url.AbsoluteUri;
+            log.HttpMethod = sender.HttpContext.Request.HttpMethod;
+            log.ViewModel = sender.Controller.ViewData.Model;
 
             _database.WriteDocument(repositoryCollection, log);
         }
+
+        public void Log(System.Web.Mvc.ActionExecutedContext sender)
+        {
+            var log = NewDynamicLog();
+
+            log.Page = sender.HttpContext.Request.Url.AbsoluteUri;
+            log.HttpMethod = sender.HttpContext.Request.HttpMethod;
+            log.ViewModel = sender.Controller.ViewData.Model;
+
+            _database.WriteDocument(repositoryCollection, log);
+        }
+
+        
+
+        //public void Log(dynamic sender)
+        //{
+        //    var log = NewDynamicLog();
+
+        //    log.SenderData = sender;
+
+        //    _database.WriteDocument(repositoryCollection, log);
+        //}
 
         private dynamic NewDynamicLog()
         {

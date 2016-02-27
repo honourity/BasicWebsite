@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.Mvc;
 using Logic.Interfaces;
 using Logic.Models;
 
@@ -6,14 +7,19 @@ namespace BasicWebsite.Tests.Repositories
 {
     public class FakeLogRepository : ILogRepository
     {
-        public void Log(System.Web.Mvc.Controller sender)
+        public void Log(ActionExecutedContext sender)
         {
-            //nothing to do here
+            throw new NotImplementedException();
         }
 
-        public void Log(dynamic sender)
+        public void Log(ActionExecutingContext sender)
         {
-            //nothing to do here
+            throw new NotImplementedException();
+        }
+
+        public void Log(System.Web.Mvc.Controller sender)
+        {
+            throw new NotImplementedException();
         }
     }
 }
