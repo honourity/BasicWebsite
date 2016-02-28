@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Logic.Interfaces;
+using BasicWebsite.Models;
 
 namespace BasicWebsite.Controllers
 {
@@ -15,36 +16,34 @@ namespace BasicWebsite.Controllers
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             base.OnActionExecuting(filterContext);
-
-            //only log this in the case of a POST, otherwise the data will be null and its pointless
             if (HttpContext.Request.RequestType == "POST") _logRepository.Log(filterContext);            
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             base.OnActionExecuted(filterContext);
-
-            //use this to get the model data filterContext.Controller.ViewData.Model;
             _logRepository.Log(filterContext);
         }
 
         public ActionResult Index()
         {
-            return View();
+            HomeModel model = new HomeModel();
+
+            return View(model);
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            HomeModel model = new HomeModel();
 
-            return View();
+            return View(model);
         }
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            HomeModel model = new HomeModel();
 
-            return View();
+            return View(model);
         }
     }
 }

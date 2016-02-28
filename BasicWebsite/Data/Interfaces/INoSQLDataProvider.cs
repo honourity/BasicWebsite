@@ -2,7 +2,7 @@
 
 namespace Data.Interfaces
 {
-    public interface IMongoDBServer
+    public interface INoSQLDataProvider
     {
         Task WriteDocument(string collectionName, dynamic document);
     }
