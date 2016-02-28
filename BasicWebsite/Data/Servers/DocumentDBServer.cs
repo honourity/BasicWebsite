@@ -23,7 +23,9 @@ namespace Data.Servers
         {
             _client = new DocumentClient(new Uri(END_POINT_URL), AUTHORIZATION_KEY);
 
-            _database = InitializeDatabase(_client).Result;
+            Task<Database> initDatabase = InitializeDatabase(_client);
+            initDatabase.Wait();
+            _database = initDatabase.Result;
         }
 
         private async Task<Database> InitializeDatabase(DocumentClient client)
@@ -60,7 +62,9 @@ namespace Data.Servers
 
         public async Task WriteDocument(string collectionName, dynamic document)
         {
-            DocumentCollection collection = InitializeCollection(_client, _database, collectionName).Result;
+            Task<DocumentCollection> initCollection = InitializeCollection(_client, _database, collectionName);
+            initCollection.Wait();
+            DocumentCollection collection = initCollection.Result;
 
             await _client.CreateDocumentAsync("dbs/" + _database.Id + "/colls/" + collection.Id, document);
         }

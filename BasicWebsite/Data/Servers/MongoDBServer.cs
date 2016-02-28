@@ -14,7 +14,7 @@ namespace Data.Servers
 
         public MongoDBServer()
         {
-            _client = new MongoClient(CONNECTION_STRING + DATABASE_NAME);
+            _client = new MongoClient(CONNECTION_STRING);
             _database = _client.GetDatabase(DATABASE_NAME);
         }
 
