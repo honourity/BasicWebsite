@@ -8,7 +8,7 @@ namespace BasicWebsite
     {
         public void Configuration(IAppBuilder app)
         {
-            
+
         }
     }
 }

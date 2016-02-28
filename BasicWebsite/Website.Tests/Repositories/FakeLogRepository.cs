@@ -12,6 +12,11 @@ namespace BasicWebsite.Tests.Repositories
             throw new NotImplementedException();
         }
 
+        public void Log(dynamic sender)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Log(ActionExecutingContext sender)
         {
             throw new NotImplementedException();

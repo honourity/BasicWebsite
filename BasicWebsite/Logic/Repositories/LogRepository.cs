@@ -7,14 +7,11 @@ namespace Logic.Repositories
     {
         private const string REPOSITORY_COLLECTION_NAME = "Website";
 
-        private INoSQLDataProvider _database1;
-        private INoSQLDataProvider _database2;
+        private INoSQLDataProvider _database;
 
-        public LogRepository()
+        public LogRepository(INoSQLDataProvider database)
         {
-            //use INoSQLDataProvider database for dependency injection
-            _database1 = new Data.Servers.MongoDBServer();
-            _database2 = new Data.Servers.DocumentDBServer();
+            _database = database;
         }
 
         public void Log(System.Web.Mvc.ActionExecutingContext sender)
@@ -26,8 +23,7 @@ namespace Logic.Repositories
             log.HttpDirection = "Request";
             log.ViewModel = sender.Controller.ViewData.Model;
 
-            _database1.WriteDocument(REPOSITORY_COLLECTION_NAME, log);
-            _database2.WriteDocument(REPOSITORY_COLLECTION_NAME, log);
+            _database.WriteDocument(REPOSITORY_COLLECTION_NAME, log);
         }
 
         public void Log(System.Web.Mvc.ActionExecutedContext sender)
@@ -39,19 +35,18 @@ namespace Logic.Repositories
             log.HttpDirection = "Response";
             log.ViewModel = sender.Controller.ViewData.Model;
 
-            _database1.WriteDocument(REPOSITORY_COLLECTION_NAME, log);
-            _database2.WriteDocument(REPOSITORY_COLLECTION_NAME, log);
+            _database.WriteDocument(REPOSITORY_COLLECTION_NAME, log);
         }
 
-        //public void Log(dynamic sender)
-        //{
-        //    var log = NewDynamicLog();
+        public void Log(dynamic sender)
+        {
+            var log = NewDynamicLog();
 
-        //    log.SenderData = sender;
+            log.SenderData = sender;
 
-        //    _database.WriteDocument(repositoryCollection, log);
-        //}
-    
+            _database.WriteDocument(REPOSITORY_COLLECTION_NAME, log);
+        }
+
         private dynamic NewDynamicLog()
         {
             dynamic log = new System.Dynamic.ExpandoObject();

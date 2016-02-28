@@ -9,7 +9,7 @@ namespace BasicWebsite.Ninject
             //ideally, auto-bind all classes from Data/Servers and Logic/Repositories  with their interfaces
 
             kernel.Bind<Logic.Interfaces.ILogRepository>().To<Logic.Repositories.LogRepository>();
-            //kernel.Bind<Data.Interfaces.INoSQLDataProvider>().To<Data.Servers.MongoDBServer>();
+            kernel.Bind<Data.Interfaces.INoSQLDataProvider>().To<Data.Servers.MongoDBServer>();
         }
     }
 }
