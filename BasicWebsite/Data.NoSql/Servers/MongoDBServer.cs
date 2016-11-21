@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using MongoDB.Driver;
-using Data.Interfaces;
+using Data.NoSql.Interfaces;
+using System;
 
-namespace Data.Servers
+namespace Data.NoSql.Servers
 {
     public class MongoDBServer : INoSQLDataProvider
     {
@@ -16,6 +17,11 @@ namespace Data.Servers
         {
             _client = new MongoClient(CONNECTION_STRING);
             _database = _client.GetDatabase(DATABASE_NAME);
+        }
+
+        public System.Collections.Generic.IEnumerable<dynamic> QueryDocuments(string query)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task WriteDocument(string collectionName, dynamic document)

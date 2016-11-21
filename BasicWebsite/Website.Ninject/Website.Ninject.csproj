@@ -48,12 +48,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Data\Data.csproj">
+    <ProjectReference Include="..\Data.NoSql\Data.NoSql.csproj">
       <Project>{19bd939f-9e6b-48eb-a8f4-59feb998e8a9}</Project>
-      <Name>Data</Name>
+      <Name>Data.NoSql</Name>
     </ProjectReference>
     <ProjectReference Include="..\Logic\Logic.csproj">
       <Project>{4033a1a9-93a9-4117-8474-d3c8ac39a719}</Project>

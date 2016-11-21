@@ -1,4 +1,4 @@
-﻿using Data.Interfaces;
+﻿using Data.NoSql.Interfaces;
 using Logic.Interfaces;
 
 namespace Logic.Repositories

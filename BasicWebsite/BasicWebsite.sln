@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website", "Website\Website.csproj", "{94AB428D-D757-415D-B1BE-EE6930D113EC}"
 EndProject
@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website.Tests", "Website.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logic", "Logic\Logic.csproj", "{4033A1A9-93A9-4117-8474-D3C8AC39A719}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{19BD939F-9E6B-48EB-A8F4-59FEB998E8A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data.NoSql", "Data.NoSql\Data.NoSql.csproj", "{19BD939F-9E6B-48EB-A8F4-59FEB998E8A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website.Ninject", "Website.Ninject\Website.Ninject.csproj", "{52D6138F-F921-4783-BEF1-C3B3C2E6B06D}"
 EndProject
