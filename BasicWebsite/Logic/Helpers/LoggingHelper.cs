@@ -1,71 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Data.NoSql.Interfaces;
-using Shared.Settings;
 
-namespace Shared.Helpers
+namespace Logic.Helpers
 {
-    public static class LoggingHelper
+    //this was created after LogRepository but is more dynamic and hacky
+    //should try merge them to an optimum middleground
+    public class LoggingHelper
     {
         //choose which dataprovider to use here
-        private static INoSQLDataProvider _dataProvider = new Data.NoSql.Servers.DocumentDBServer();
+        private INoSQLDataProvider _dataProvider = new Data.NoSql.Servers.DocumentDBServer();
+
+        public LoggingHelper(INoSQLDataProvider dataProvider)
+        {
+            this._dataProvider = dataProvider;
+        }
 
         /// <summary>
         /// Logs an object to a NoSQL data repository
         /// </summary>
         /// <param name="data">anything you with to log. Will be converted ToJSON() and stored with some additional data wrapped around it</param>
-        public static async Task Log(object data)
+        public async Task<string> Log(object data)
         {
-            var environment = ConfigHelper.GetConfigValue<string>("EnvironmentURL");
-            await _dataProvider.WriteDocument(environment ?? "NoEnvironment", WrapLogData(environment, data));
+            var log = WrapLogData(data);
+            await _dataProvider.WriteDocument("Logs", log);
+            return log["Code"].ToString();
         }
 
-        /// <summary>
-        /// Fetches NoSQL log data based on input query string
-        /// </summary>
-        /// <param name="query">an sql query string to fetch a json array of matching log entries</param>
-        public static string Query(string query)
+        private Dictionary<string, object> WrapLogData(object data)
         {
-            StringBuilder result = new StringBuilder();
-            result.Append("{\"Logs\":[");
-
-            var documents = _dataProvider.QueryDocuments(query);
-            foreach (dynamic document in documents)
+            var logContainer = new Dictionary<string, object>
             {
-                result.AppendLine(((object)document).ToJSON());
-                result.Append(",");
-            }
-
-            if (documents.Any()) result.Remove(result.Length - 1, 1);
-
-            result.Append("]}");
-
-            return result.ToString();
-        }
-
-        private static object WrapLogData(string environment, object data)
-        {
-            var logContainer = new Dictionary<string, object>();
-
-            logContainer["Data"] = data;
+                ["Data"] = data,
+                ["Code"] = Guid.NewGuid().ToString("N")
+            };
 
             if (System.Web.HttpContext.Current != null)
             {
                 logContainer["Url"] = System.Web.HttpContext.Current.Request.Url.PathAndQuery;
             }
 
-            logContainer["Environment"] = environment ?? "EnvironmentURL not defined in appsettings for current project";
-            logContainer["TimeStamp"] = CustomDateFormat(DateTime.Now);
-
             return logContainer;
-        }
-
-        private static long CustomDateFormat(DateTime date)
-        {
-            return Convert.ToInt64(date.ToString("yyyyMMddHHmmss"));
         }
     }
 }

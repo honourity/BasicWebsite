@@ -8,8 +8,10 @@ namespace BasicWebsite.Ninject
         {
             //todo - ideally, auto-bind all classes from Data/Servers and Logic/Repositories  with their interfaces
 
+            //using mongodb
+            kernel.Bind<Data.NoSql.Interfaces.INoSQLDataProvider>().To<Data.NoSql.Servers.MongoDBServer>();
+
             kernel.Bind<Logic.Interfaces.ILogRepository>().To<Logic.Repositories.LogRepository>();
-            kernel.Bind<Data.Interfaces.INoSQLDataProvider>().To<Data.Servers.MongoDBServer>(); //use mongodb
         }
     }
 }

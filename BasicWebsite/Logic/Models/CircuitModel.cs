@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Reflection;
-using Shared.Settings;
+using System.Web.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Logic.Helpers;
 
-namespace Shared.Models
+namespace Logic.Models
 {
     [Serializable]
     public class CircuitModel
@@ -40,6 +39,7 @@ namespace Shared.Models
             All = 5
         }
 
+        public DateTime ModelCreatedDate { get; internal set; }
         public string MethodKey { get; internal set; }
         public string MethodAssembly { get; internal set; }
         public string MethodNamespace { get; internal set; }
@@ -68,14 +68,45 @@ namespace Shared.Models
         }
         public ulong Calls { get; internal set; }
         public DateTime? LastAttemptTimestamp { get; internal set; }
-        public int LastAttemptTimeTaken { get; internal set; }
+        public double LastAttemptTimeTaken { get; internal set; }
         public FailureReasonEnum LastAttemptFailureReason { get; internal set; }
         public int ErrorCount { get; internal set; }
         public DateTime? LastFailedAttemptTimestamp { get; internal set; }
         public LogLevelEnum LogLevel { get; internal set; }
 
+        [JsonIgnore]
+        public string LastLogSerialized { get; set; }
+
+        public dynamic LastLog
+        {
+            get
+            {
+                if (LastLogSerialized == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return Json.Decode(LastLogSerialized);
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public string LastWebServiceLogSerialized { get; set; }
+
+        public string LastWebServiceLog
+        {
+            get
+            {
+                return LastWebServiceLogSerialized;
+            }
+        }
+
         public CircuitModel(string methodKey, MethodInfo methodInfo)
         {
+            ModelCreatedDate = DateTime.Now;
+
             Type methodType = methodInfo.DeclaringType;
 
             MethodKey = methodKey;
@@ -83,8 +114,15 @@ namespace Shared.Models
 
             string rawNamespace = methodType.Namespace;
             int index = rawNamespace.IndexOf(MethodAssembly);
-            //+1 on the length to remove, to remove the . at end of namespace
-            MethodNamespace = (index < 0) ? rawNamespace : rawNamespace.Remove(index, MethodAssembly.Length + 1);
+            //+1 on the length to remove, to remove the . at end of namespace (unless the assembly IS the namespace, so we do nothing)
+            if (MethodAssembly.Length == rawNamespace.Length)
+            {
+                MethodNamespace = rawNamespace;
+            }
+            else
+            {
+                MethodNamespace = (index < 0) ? rawNamespace : rawNamespace.Remove(index, MethodAssembly.Length + 1);
+            }
 
             MethodDeclaringType = methodType.Name;
             MethodName = methodInfo.Name;
@@ -93,172 +131,8 @@ namespace Shared.Models
             LastAttemptTimestamp = null;
             LastFailedAttemptTimestamp = null;
 
-            var circuitConfigSection = (Shared.Models.CircuitModelConfigurationSection)System.Web.Configuration.WebConfigurationManager.GetSection("CircuitBreakerConfigSection");
-
-            var item = circuitConfigSection.Circuits.FirstOrDefault(match => match.Name == methodKey);
-            if (item == null) item = circuitConfigSection.Circuits.FirstOrDefault(match => match.Name == "Default");
-
-            if (item != null)
-            {
-                if (item.Timeout != null) Timeout = item.Timeout.Value;
-
-                if (item.LimitBreak != null) LimitBreak = item.LimitBreak.Value;
-
-                if (item.Cooldown != null) Cooldown = item.Cooldown.Value;
-
-                if (item.LogLevel != null) LogLevel = item.LogLevel.Value;
-            }
-            else
-            {
-                throw new Exception("CircuitModel configuration invalid. Check to make sure CircuitBreaker.config is setup properly.");
-            }
-        }
-
-        public string GenerateLogsQueryMostRecent(int logsToFetch)
-        {
-            return string.Format("SELECT TOP {0} * FROM logs WHERE logs.Data.Method = \"{1}\" AND logs.Environment = \"{2}\" ORDER BY logs.TimeStamp desc", logsToFetch, MethodKey, ConfigHelper.GetConfigValue<string>("EnvironmentURL"));
-        }
-    }
-
-    public class CircuitModelConfigurationSection : ConfigurationSection
-    {
-        [ConfigurationProperty("Circuits", IsRequired = false)]
-        public CircuitModelConfigurationElementCollection Circuits
-        {
-            get { return base["Circuits"] as CircuitModelConfigurationElementCollection; }
-        }
-    }
-
-    [ConfigurationCollection(typeof(CircuitModelConfigurationElement), AddItemName = "Circuit", CollectionType = ConfigurationElementCollectionType.BasicMap)]
-    public class CircuitModelConfigurationElementCollection : ConfigurationElementCollection, IEnumerable<CircuitModelConfigurationElement>
-    {
-        public CircuitModelConfigurationElement this[int index]
-        {
-            get { return (CircuitModelConfigurationElement)BaseGet(index); }
-            set
-            {
-                if (BaseGet(index) != null)
-                {
-                    BaseRemoveAt(index);
-                }
-                BaseAdd(index, value);
-            }
-        }
-
-        public void Add(CircuitModelConfigurationElement elem)
-        {
-            BaseAdd(elem);
-        }
-
-        public void Clear()
-        {
-            BaseClear();
-        }
-
-        protected override ConfigurationElement CreateNewElement()
-        {
-            return new CircuitModelConfigurationElement();
-        }
-
-        protected override object GetElementKey(ConfigurationElement element)
-        {
-            return ((CircuitModelConfigurationElement)element).Name;
-        }
-
-        public void Remove(CircuitModelConfigurationElement elem)
-        {
-            BaseRemove(elem.Name);
-        }
-
-        public void RemoveAt(int index)
-        {
-            BaseRemoveAt(index);
-        }
-
-        public void Remove(String name)
-        {
-            BaseRemove(name);
-        }
-
-        public new IEnumerator<CircuitModelConfigurationElement> GetEnumerator()
-        {
-            int count = base.Count;
-            for (int i = 0; i < count; i++)
-            {
-                yield return base.BaseGet(i) as CircuitModelConfigurationElement;
-            }
-        }
-    }
-
-    public class CircuitModelConfigurationElement : ConfigurationElement
-    {
-        [ConfigurationProperty("Name", DefaultValue = "Default", IsRequired = false)]
-        public string Name
-        {
-            get
-            {
-                return this["Name"] as string;
-            }
-            set
-            {
-                this["Name"] = value;
-            }
-        }
-
-        [ConfigurationProperty("Timeout", IsRequired = false)]
-        public CircuitModelConfigurationValueProperty<int> Timeout
-        {
-            get
-            {
-                return this["Timeout"] as CircuitModelConfigurationValueProperty<int>;
-            }
-            set
-            { this["Timeout"] = value; }
-        }
-
-        [ConfigurationProperty("LimitBreak", IsRequired = false)]
-        public CircuitModelConfigurationValueProperty<int> LimitBreak
-        {
-            get
-            {
-                return this["LimitBreak"] as CircuitModelConfigurationValueProperty<int>;
-            }
-            set
-            { this["LimitBreak"] = value; }
-        }
-
-        [ConfigurationProperty("Cooldown", IsRequired = false)]
-        public CircuitModelConfigurationValueProperty<int> Cooldown
-        {
-            get
-            {
-                return this["Cooldown"] as CircuitModelConfigurationValueProperty<int>;
-            }
-            set
-            { this["Cooldown"] = value; }
-        }
-
-        [ConfigurationProperty("LogLevel", IsRequired = false)]
-        public CircuitModelConfigurationValueProperty<CircuitModel.LogLevelEnum> LogLevel
-        {
-            get
-            {
-                return this["LogLevel"] as CircuitModelConfigurationValueProperty<CircuitModel.LogLevelEnum>;
-            }
-            set
-            { this["LogLevel"] = value; }
-        }
-    }
-
-    public class CircuitModelConfigurationValueProperty<T> : ConfigurationElement
-    {
-        [ConfigurationProperty("Value", IsRequired = false)]
-        public T Value
-        {
-            get
-            { return (T)this["Value"]; }
-            set
-            { this["Value"] = value; }
+            var circuitConfigSection = ConfigHelper.GetConfigValue<CircuitModelConfigurationSection>("CircuitBreakerConfigSection");
+            var item = circuitConfigSection.Circuits.FirstOrDefault(match => match.MethodKey == methodKey);
         }
     }
 }

@@ -13,17 +13,17 @@ namespace BasicWebsite.Controllers
             this._logRepository = logRepository;
         }
 
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-            if (HttpContext.Request.RequestType == "POST") _logRepository.Log(filterContext);            
-        }
+        //protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        //{
+        //    base.OnActionExecuting(filterContext);
+        //    if (HttpContext.Request.RequestType == "POST") _logRepository.Log(filterContext);            
+        //}
 
-        protected override void OnActionExecuted(ActionExecutedContext filterContext)
-        {
-            base.OnActionExecuted(filterContext);
-            _logRepository.Log(filterContext);
-        }
+        //protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        //{
+        //    base.OnActionExecuted(filterContext);
+        //    _logRepository.Log(filterContext);
+        //}
 
         public ActionResult Index()
         {

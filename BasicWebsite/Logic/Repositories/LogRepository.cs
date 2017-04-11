@@ -3,6 +3,8 @@ using Logic.Interfaces;
 
 namespace Logic.Repositories
 {
+
+    //this was made before LoggingHelper but more oriented towards request/response rather than any json document
     public class LogRepository : ILogRepository
     {
         private const string REPOSITORY_COLLECTION_NAME = "Website";
