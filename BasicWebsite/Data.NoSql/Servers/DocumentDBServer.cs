@@ -11,8 +11,8 @@ namespace Data.NoSql.Servers
 {
     public class DocumentDBServer : INoSQLDataProvider
     {
-        private const string END_POINT_URL = "https://ltaweb.documents.azure.com:443/";
-        private const string AUTHORIZATION_KEY = "SvjBdyvPT4F10lpS8o75otZQSPaF1nKaEgrPWoprEeRmhRnsmKeimzZHlagPfRmGBpOqqziscX74EQZYJGWB0Q==";
+        private const string END_POINT_URL = "";
+        private const string AUTHORIZATION_KEY = "";
         private const string DATABASE_NAME = "Logs";
 
         private DocumentClient _client;
