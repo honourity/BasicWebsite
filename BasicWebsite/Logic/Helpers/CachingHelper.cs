@@ -42,7 +42,7 @@ namespace Logic.Helpers
                 }
             }
 
-            dependenciesTableKeyFullKey = GetKey(Config.Groups.FirstOrDefault(g => g.Name == "Lta.Shared.Caching.CachingHelper").Keys.FirstOrDefault(k => k.Name == "DependencyTable"), null);
+            dependenciesTableKeyFullKey = GetKey(Config.Groups.FirstOrDefault(g => g.Name == "Caching.CachingHelper").Keys.FirstOrDefault(k => k.Name == "DependencyTable"), null);
         }
 
         #region DistributedCache
