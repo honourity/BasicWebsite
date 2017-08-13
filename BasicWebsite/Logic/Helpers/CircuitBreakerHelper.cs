@@ -20,8 +20,8 @@ namespace Logic.Helpers
         {
             this._cachingHelper = cachingHelper;
 
-            this._hashTableConfigElement = _cachingHelper.Config.Groups.FirstOrDefault(group => group.Name == "Lta.Shared.Helpers.CircuitBreakerHelper").Keys.FirstOrDefault(key => key.Name == "HashTable");
-            this._circuitConfigElement = _cachingHelper.Config.Groups.FirstOrDefault(group => group.Name == "Lta.Shared.Helpers.CircuitBreakerHelper").Keys.FirstOrDefault(key => key.Name == "Circuit");
+            this._hashTableConfigElement = _cachingHelper.Config.Groups.FirstOrDefault(group => group.Name == "Helpers.CircuitBreakerHelper").Keys.FirstOrDefault(key => key.Name == "HashTable");
+            this._circuitConfigElement = _cachingHelper.Config.Groups.FirstOrDefault(group => group.Name == "Helpers.CircuitBreakerHelper").Keys.FirstOrDefault(key => key.Name == "Circuit");
         }
 
         #region public
