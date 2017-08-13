@@ -7,7 +7,7 @@ namespace Data.NoSql.Servers
 {
     public class MongoDBServer : INoSQLDataProvider
     {
-        private const string CONNECTION_STRING = "mongodb://Logs:8QPd_9iZRhBUu6i6cS.Ppd_LRmvmYcU8gUM0Oh5GeuE-@ds054128.mlab.com:54128/Logs";
+        private const string CONNECTION_STRING = "";
         private const string DATABASE_NAME = "Logs";
 
         private MongoClient _client;
